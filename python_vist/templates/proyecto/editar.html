@@ -1,0 +1,48 @@
+{% extends "template.html" %}
+{% block content %}
+<div>
+    <h2>EDITAR PROYECTOS</h2>
+
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="card">
+            <div>
+                <h5 class="card-title">Edision de Clientes</h5>
+                <form class="row g-3 needs-validation" method="POST" action="/home/proyecto/update" novalidate>
+                <input type="hidden" value="{{person.id}}" name="id"/>
+                    <div class="col-md-6">
+                        <label for="lbltipo" class="form-label">Tipo de Proyecto</label>
+                        <select class="form-control" required name="tipo">
+                            {% for item in lista%}
+                            <option value="{{item}}">{{item}}</option>
+                            {% endfor%}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="validationCustom01" class="form-label">Nombre Proyecto</label>
+                        <input type="text" class="form-control" name="nom" required value={{person.nombreProyecto}}>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="validationCustom02" class="form-label">Inversion Total</label>
+                        <input type="text" class="form-control" name="inver" required value={{person.inversionTotal}}>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="validationCustom02" class="form-label">Tiempo de Vida del Proyecto</label>
+                        <input type="text" class="form-control" name="tiem" required value={{person.tiempoVidaAnios}}>
+                    </div>
+                    <div class="col-6">
+                        <button class= "btn btn-success" type="submit">GUARDAR</button>
+                    </div>
+                    <div class="col-6">
+                        <a href="/home/proyecto/list" class="btn btn-danger">CANCELAR</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+    
+{% endblock%}

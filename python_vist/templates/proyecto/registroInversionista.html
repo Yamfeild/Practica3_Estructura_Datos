@@ -1,0 +1,48 @@
+{% extends "template.html" %}
+{% block content %}
+
+<div>
+    <h2>LISTADO DE INVERSIONISTAS </h2>
+
+</div>
+<section class="section">
+    <div class="row">
+        <div class="card">
+            <div>
+                <h5 class="card-title">Registro de Inversionista</h5>
+                <form class="row g-3 needs-validation" method="POST" action="/home/inversionista/save" novalidate>
+                    
+                    <div class="col-md-6">
+                        <label for="validationCustom02" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" name="nom" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="validationCustom02" class="form-label">Apellido</label>
+                        <input type="text" class="form-control" name="apell" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="validationCustom02" class="form-label">Telefono</label>
+                        <input type="text" class="form-control" name="tel" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="validationCustom02" class="form-label">identificacion</label>
+                        <input type="text" class="form-control" name="iden" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label for="validationCustom02" class="form-label">Monto Invertido</label>
+                        <input type="text" class="form-control" name="mont" required>
+                    </div>
+                    <div class="col-6">
+                        <button class= "btn btn-success" type="submit">REGISTRAR</button>
+                    </div>
+                    <div class="col-6">
+                        <a href="/home/inversionista/list" class="btn btn-danger">CANCELAR</a>
+                    </div>
+                </form>
+            </div>
+
+        </div>
+    </div>
+</section>
+    
+{% endblock%}

@@ -1,0 +1,105 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="pagetitle">
+    <h2>LISTA DE PROYECTOS</h2>
+</div>
+
+<section class="section">
+    <div class="row">
+        <div class="col-lg-12">
+
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Proyectos</h5>
+                    
+                    
+
+                    <!-- Formulario para ordenar -->
+                    <form method="GET" class="d-flex align-items-center mb-3" action="/home/proyecto/order/">
+                        <label for="sortMethod" class="form-label me-2">Método de Ordenación:</label>
+                        <select name="algorimo_sort" id="sortMethod" class="form-select me-3" required>
+                            <option value="quick">QuickSort</option>
+                            <option value="merge">MergeSort</option>
+                            <option value="shell">ShellSort</option>
+                        </select>
+
+                        <label for="atributo_nom" class="form-label me-2">Atributo:</label>
+                        <select name="atributo_nom" id="atributo_nom" class="form-select me-3" required>
+                            <option value="nombreProyecto">Nombre Proyecto</option>
+                            <!-- Otros atributos si es necesario -->
+                        </select>
+
+                        <label for="type" class="form-label me-2">Orden:</label>
+                        <select name="type" id="sortOrder" class="form-select me-3" required>
+                            <option value="1">Ascendente</option>
+                            <option value="0">Descendente</option>
+                        </select>
+
+                        <button type="submit" class="btn btn-primary">Ordenar</button>
+                    </form>
+
+                    
+                    <form method="GET" class="d-flex align-items-center mb-3" action="/home/proyecto/search/codigo/">
+                        <label for="searchValue" class="form-label me-2">Código del Proyecto:</label>
+                        <input type="number" name="codigoProyecto" id="searchValue" class="form-control me-3" placeholder="Ingrese el código (Busqueda binaria)" required />
+                    
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </form>
+
+                    <form method="GET" class="d-flex align-items-center mb-3" action="/home/proyecto/search/">
+                        <label for="searchName" class="form-label me-2">Nombre del Proyecto:</label>
+                        <input type="text" name="nombreProyecto" id="searchName" class="form-control me-3" placeholder="Ingrese el nombre (Busqueda Lineal)" required />
+                        <button type="submit" class="btn btn-primary">Buscar</button>
+                    </form>
+
+                    <!-- Botón para agregar nuevo proyecto -->
+                    <div class="mb-3">
+                        <a href="/home/proyecto/register" class="btn btn-success">AGREGAR PROYECTO</a>
+                    </div>
+                    
+
+                    
+                    
+                    
+
+
+                   
+                
+                    
+                    
+                    <!-- Tabla de proyectos -->
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Nro</th>
+                                <th>Nombre Proyecto</th>
+                                <th>Identificacion Proyecto</th>
+                                <th>Tipo de Proyecto</th>
+                                <th>Inversión Total ($)</th>
+                                <th>Tiempo de Vida del Proyecto</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in lista %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{ item.nombreProyecto }}</td>
+                                <td>{{ item.codigoProyecto }}</td>
+                                <td>{{ item.tipo }}</td>
+                                <td>{{ item.inversionTotal }} $</td>
+                                <td>{{ item.tiempoVidaAnios }} Años</td>
+                                <td>
+                                    <a href="/home/proyecto/edit/{{ item.id }}" class="btn btn-info">MODIFICAR</a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</section>
+{% endblock %}

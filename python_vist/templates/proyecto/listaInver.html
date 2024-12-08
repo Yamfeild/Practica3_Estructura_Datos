@@ -1,0 +1,55 @@
+{% extends "template.html" %}
+{% block content %}
+<div class="pagetitle">
+    <h2>LISTA DE INVERSIONISTAS</h2>
+ 
+  </div>
+
+  <section class="section">
+    <div class="row">
+      <div class="col-lg-12">
+
+        <div class="card">
+          <div class="card-body">
+            <h5 class="card-title">Inversionistas</h5>
+            <div>
+              <a href="/home/inversionista/register" class="btn btn-success">Nuevo</a>
+            </div>
+            <table class= "table">
+                <thead>
+                    <tr>
+                        <th>Nro</th>
+                        <th>Nombre Inversionista</th>
+                        <th>Apellido Inversionista</th>
+                        <th>Identificacion</th>
+                        <th>Telefono</th>
+                       <th>Monto Invertido</th>
+                                            
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in lista %}
+                    <tr>
+                        <td>{{item.id}}</td>
+                        <td>{{item.nombre}}</td>
+                        <td>{{item.apellido}}</td>
+                        <td>{{item.identificacion}} </p></td>
+                        <td>{{item.telefono}} </td>
+                        <td>{{item.montoInvertido}}</td>
+                        <td><a href="/home/inversionista/edit/{{item.id}}" class="btn btn-info">MODIFICAR</a></td>
+                    </tr>
+                    {% endfor%}
+                    
+                </tbody>
+            </table>
+          </div>
+        </div>
+
+      </div>
+
+
+    </div>
+  </section>
+
+{% endblock%}
