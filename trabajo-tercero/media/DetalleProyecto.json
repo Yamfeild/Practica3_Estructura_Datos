@@ -1,0 +1,8 @@
+[
+    {
+        "id": 1,
+        "fechaInicio": "25/02/2024",
+        "fechaFin": "30/03/2025",
+        "capacidadGeneracionDiariaWatts": 10.0
+    }
+]

@@ -1,0 +1,18 @@
+[
+    {
+        "id": 1,
+        "nombre": "Mateo",
+        "apellido": "Ruiz",
+        "telefono": "0967632689",
+        "identificacion": "1900805852",
+        "montoInvertido": 100000.25
+    },
+    {
+        "id": 2,
+        "nombre": "David",
+        "apellido": "Gonzales",
+        "telefono": "0123456789",
+        "identificacion": "0120304050",
+        "montoInvertido": 500.45
+    }
+]
