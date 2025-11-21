@@ -15,9 +15,13 @@
                     <div class="col-md-6">
                         <label for="lbltipo" class="form-label">Tipo de Proyecto</label>
                         <select class="form-control" required name="tipo">
-                            {% for item in lista%}
-                            <option value="{{item}}">{{item}}</option>
-                            {% endfor%}
+                            {% if lista and lista|length > 0 %}
+                                {% for item in lista %}
+                                    <option value="{{ item['id'] }}" {% if person.tipo == item['id'] %}selected{% endif %}>{{ item['nombre'] }}</option>
+                                {% endfor %}
+                            {% else %}
+                                <option disabled selected>No hay tipos disponibles</option>
+                            {% endif %}
                         </select>
                     </div>
                     <div class="col-md-6">

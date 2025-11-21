@@ -39,7 +39,24 @@
         }, 300);
       }
     });
-  
   })(window.jQuery);
+
+// Function to fetch data from JSONPlaceholder using Fetch API
+async function fetchPosts() {
+    try {
+        const response = await fetch('https://jsonplaceholder.typicode.com/posts');
+        if (!response.ok) {
+            throw new Error('Network response was not ok');
+        }
+        const data = await response.json();
+        console.log(data);
+        // You can process the data here, e.g., display it in the DOM
+    } catch (error) {
+        console.error('Error fetching data:', error);
+    }
+}
+
+// Example: Call the function when the page loads
+// window.addEventListener('load', fetchPosts);
 
 

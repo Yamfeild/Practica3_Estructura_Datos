@@ -1,12 +1,14 @@
 from flask import Blueprint, abort, request, render_template, redirect, flash
 import requests
+from requests.exceptions import RequestException
 import json
 router = Blueprint('router', __name__)
 
-"""@router.route('/')
-def home():
-    
-    return render_template('/inicial/login.html')"""
+
+# Ruta raíz: redirige a /home para evitar 404 en la raíz
+@router.route('/')
+def index():
+    return redirect('/home')
 
 
 @router.route('/home')
@@ -17,36 +19,47 @@ def home():
 #Registrar persona
 @router.route('/home/proyecto/register')
 def view_register_person():
-    r = requests.get("http://localhost:8080/myapp/proyecto/listType")
-    data = r.json()
-    print(r.json())
-    return render_template('proyecto/registro.html', lista = data["data"])
+    try:
+        r = requests.get("http://localhost:8080/myapp/proyecto/listType", timeout=5)
+        data = r.json()
+        # debug log
+        print("DEBUG: /myapp/proyecto/listType ->", data)
+        return render_template('proyecto/registro.html', lista=data.get("data", []))
+    except RequestException as e:
+        flash(f"No se pudo conectar con el servicio de proyectos: {e}", category='error')
+        return render_template('proyecto/registro.html', lista=[])
 
 
 #Editar persona
 @router.route('/home/proyecto/edit/<id>')
 def view_edit_person(id):
-    r = requests.get("http://localhost:8080/myapp/proyecto/listType")
-    data = r.json()
-    r1 = requests.get("http://localhost:8080/myapp/proyecto/get/"+id)
-    data1 = r1.json()
-    if(r1.status_code == 200):
-        return render_template('proyecto/editar.html', lista = data["data"], person = data1["data"])
-    else:
-        flash(data1["data"], category='error')
+    try:
+        r = requests.get("http://localhost:8080/myapp/proyecto/listType", timeout=5)
+        data = r.json()
+        r1 = requests.get("http://localhost:8080/myapp/proyecto/get/" + id, timeout=5)
+        data1 = r1.json()
+        if r1.status_code == 200:
+            return render_template('proyecto/editar.html', lista=data.get("data", []), person=data1.get("data"))
+        else:
+            flash(data1.get("data", "Error desconocido"), category='error')
+            return redirect("/home/proyecto/list")
+    except RequestException as e:
+        flash(f"No se pudo conectar con el servicio de proyectos: {e}", category='error')
         return redirect("/home/proyecto/list")
     
     
 # lista de personas
 @router.route('/home/proyecto/list')
 def list_person():
-    r = requests.get("http://localhost:8080/myapp/proyecto/list")
-    rs = requests.get("http://localhost:8080/myapp/inversionista/list")
-    #print(type(r.json()))
-    #print(r.json())
-    data = r.json()
-    data1 = rs.json()
-    return render_template('proyecto/lista.html', lista = data["data"],lista1 = data1["data"])
+    try:
+        r = requests.get("http://localhost:8080/myapp/proyecto/list", timeout=5)
+        rs = requests.get("http://localhost:8080/myapp/inversionista/list", timeout=5)
+        data = r.json()
+        data1 = rs.json()
+        return render_template('proyecto/lista.html', lista=data.get("data", []), lista1=data1.get("data", []))
+    except RequestException as e:
+        flash(f"No se pudo conectar con el servicio externo: {e}", category='error')
+        return render_template('proyecto/lista.html', lista=[], lista1=[])
 
 
 #Metodo de guardar
@@ -62,7 +75,7 @@ def save_person():
         flash("Se ha guardado correctamente", category='info')
         return redirect("/home/proyecto/list")
     else:
-        flash(str(dat["data"],category='error'))
+        flash(str(dat.get("data", "Error al guardar")), category='error')
         return redirect("/home/proyecto/list")
     
 #Metodo de actualizar
@@ -78,7 +91,7 @@ def update_person():
         flash("Se ha guardado correctamente", category='info')
         return redirect("/home/proyecto/list")
     else:
-        flash(str(dat["data"],category='error'))
+        flash(str(dat.get("data", "Error al guardar")), category='error')
         return redirect("/home/proyecto/list")
 
 
@@ -88,10 +101,14 @@ def update_person():
 #Registrar INVERSIONISTA
 @router.route('/home/inversionista/register')
 def view_register_inversionista():
-    r = requests.get("http://localhost:8080/myapp/inversionista/listType")
-    data = r.json()
-    print(r.json())
-    return render_template('proyecto/registroInversionista.html', lista = data["data"])
+    try:
+        r = requests.get("http://localhost:8080/myapp/inversionista/listType", timeout=5)
+        data = r.json()
+        print("DEBUG: /myapp/inversionista/listType ->", data)
+        return render_template('proyecto/registroInversionista.html', lista=data.get("data", []))
+    except RequestException as e:
+        flash(f"No se pudo conectar con el servicio de inversionistas: {e}", category='error')
+        return render_template('proyecto/registroInversionista.html', lista=[])
 
 #Metodo de guardar
 @router.route('/home/inversionista/save', methods=["POST"])
@@ -100,13 +117,17 @@ def save_Inversionista():
     form = request.form
     
     dataF = {"nombre":form["nom"], "apellido":form["apell"], "identificacion":form["iden"], "telefono":form["tel"], "montoInvertido":form["mont"]}
-    r = requests.post("http://localhost:8080/myapp/inversionista/save", data = json.dumps(dataF), headers=headers)
-    dat = r.json()
-    if r.status_code==200:
-        flash("Se ha guardado correctamente", category='info')
-        return redirect("/home/inversionista/list")
-    else:
-        flash(str(dat["data"],category='error'))
+    try:
+        r = requests.post("http://localhost:8080/myapp/inversionista/save", data=json.dumps(dataF), headers=headers, timeout=5)
+        dat = r.json()
+        if r.status_code == 200:
+            flash("Se ha guardado correctamente", category='info')
+            return redirect("/home/inversionista/list")
+        else:
+            flash(str(dat.get("data", "Error al guardar")), category='error')
+            return redirect("/home/inversionista/list")
+    except RequestException as e:
+        flash(f"Error al conectar con el servicio de inversionistas: {e}", category='error')
         return redirect("/home/inversionista/list")
     
 
@@ -114,23 +135,29 @@ def save_Inversionista():
 # lista de personas
 @router.route('/home/inversionista/list')
 def list_Inversionista():
-    r = requests.get("http://localhost:8080/myapp/inversionista/list")
-    #print(type(r.json()))
-    #print(r.json())
-    data = r.json()
-    return render_template('proyecto/listaInver.html', lista = data["data"])
+    try:
+        r = requests.get("http://localhost:8080/myapp/inversionista/list", timeout=5)
+        data = r.json()
+        return render_template('proyecto/listaInver.html', lista=data.get("data", []))
+    except RequestException as e:
+        flash(f"No se pudo conectar con el servicio de inversionistas: {e}", category='error')
+        return render_template('proyecto/listaInver.html', lista=[])
 
 #Editar persona
 @router.route('/home/inversionista/edit/<id>')
 def view_edit_inversionista(id):
-    r = requests.get("http://localhost:8080/myapp/inversionista/listType")
-    data = r.json()
-    r1 = requests.get("http://localhost:8080/myapp/inversionista/get/"+id)
-    data1 = r1.json()
-    if(r1.status_code == 200):
-        return render_template('proyecto/editar.html', lista = data["data"], person = data1["data"])
-    else:
-        flash(data1["data"], category='error')
+    try:
+        r = requests.get("http://localhost:8080/myapp/inversionista/listType", timeout=5)
+        data = r.json()
+        r1 = requests.get("http://localhost:8080/myapp/inversionista/get/" + id, timeout=5)
+        data1 = r1.json()
+        if r1.status_code == 200:
+            return render_template('proyecto/editar.html', lista=data.get("data", []), person=data1.get("data"))
+        else:
+            flash(data1.get("data", "Error desconocido"), category='error')
+            return redirect("/home/inversionista/list")
+    except RequestException as e:
+        flash(f"No se pudo conectar con el servicio de inversionistas: {e}", category='error')
         return redirect("/home/inversionista/list")
     
     
@@ -147,7 +174,7 @@ def update_inversionista():
         flash("Se ha guardado correctamente", category='info')
         return redirect("/home/inversionista/list")
     else:
-        flash(str(dat["data"],category='error'))
+        flash(str(dat.get("data", "Error al guardar")), category='error')
         return redirect("/home/inversionista/list")
     
 
