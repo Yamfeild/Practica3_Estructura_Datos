@@ -12,7 +12,7 @@ python -m venv .venv
 
 1.Activar el entorno virtual:
 
-.\.venv\Scripts\activate
+venv\Scripts\activate
 
 Actualizar pip (opcional pero recomendado):
 
