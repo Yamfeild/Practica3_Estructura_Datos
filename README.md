@@ -1,5 +1,34 @@
 Pasos para ejecutar
 
+Pasos para configurar el entorno virtual e instalar las librerías necesarias
+
+Abrir una terminal o consola y navegar al directorio del proyecto:
+
+cd python_vist
+
+Crear un entorno virtual:
+
+python -m venv .venv
+
+1.Activar el entorno virtual:
+
+.\.venv\Scripts\activate
+
+Actualizar pip (opcional pero recomendado):
+
+python -m pip install --upgrade pip
+
+
+2. Instalar las librerías desde requirements.txt:
+
+pip install -r requirements.txt
+
+Esto instalará Flask, requests y Flask-SQLAlchemy, entre otras dependencias.
+
+Ejecutar la aplicación:
+
+python.exe index.py
+
 
 # Práctica: Peticiones HTTP desde el Frontend
 
